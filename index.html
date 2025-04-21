@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet 3D | Fine Dining Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/three@0.132.2/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .perspective-container {
+            perspective: 1000px;
+        }
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .menu-item:hover {
+            transform: translateZ(20px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+        }
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        #foodCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans overflow-x-hidden">
+    <!-- 3D Canvas Background -->
+    <canvas id="foodCanvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-90 backdrop-filter backdrop-blur-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-3xl font-bold text-yellow-400 tracking-wider">
+                    Gourmet<span class="text-white">3D</span>
+                </div>
+                <div class="hidden md:flex space-x-10">
+                    <a href="#home" class="hover:text-yellow-400 transition">Home</a>
+                    <a href="#menu" class="hover:text-yellow-400 transition">Menu</a>
+                    <a href="#gallery" class="hover:text-yellow-400 transition">Gallery</a>
+                    <a href="#about" class="hover:text-yellow-400 transition">About</a>
+                    <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
+                </div>
+                <button class="md:hidden focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="container mx-auto px-6 z-10 text-center perspective-container">
+            <div class="card-3d max-w-4xl mx-auto p-10 bg-black bg-opacity-70 rounded-xl backdrop-filter backdrop-blur-sm">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 text-yellow-400 transform hover:rotateY(10deg)">Experience Dining in 3D</h1>
+                <p class="text-xl mb-10">Where every dish tells a story and every bite takes you on a journey</p>
+                <div class="flex justify-center space-x-4">
+                    <button class="px-8 py-3 bg-yellow-500 hover:bg-yellow-600 rounded-full font-bold transform hover:scale-110 transition">
+                        View Menu
+                    </button>
+                    <button class="px-8 py-3 border-2 border-white hover:bg-white hover:text-black rounded-full font-bold transform hover:scale-110 transition">
+                        Book a Table
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Dishes -->
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-yellow-400">Our Signature Creations</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 perspective-container">
+                <!-- Dish 1 -->
+                <div class="card-3d bg-gray-900 rounded-xl overflow-hidden shadow-2xl hover:shadow-yellow-500/30 transition-all duration-500">
+                    <div class="h-64 bg-gradient-to-r from-yellow-600 to-yellow-800 flex items-center justify-center floating">
+                        <i class="fas fa-utensils text-8xl text-white opacity-80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Truffle Infused Risotto</h3>
+                        <p class="text-gray-400 mb-4">Creamy Arborio rice with wild mushrooms and black truffle shavings</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-yellow-400 text-xl font-bold">$28</span>
+                            <button class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-full text-sm font-bold">
+                                Add to Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dish 2 -->
+                <div class="card-3d bg-gray-900 rounded-xl overflow-hidden shadow-2xl hover:shadow-yellow-500/30 transition-all duration-500 transform hover:rotateY(5deg)">
+                    <div class="h-64 bg-gradient-to-r from-red-600 to-red-800 flex items-center justify-center floating">
+                        <i class="fas fa-drumstick-bite text-8xl text-white opacity-80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Herb Crusted Rack of Lamb</h3>
+                        <p class="text-gray-400 mb-4">New Zealand lamb with rosemary crust and red wine reduction</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-yellow-400 text-xl font-bold">$42</span>
+                            <button class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-full text-sm font-bold">
+                                Add to Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dish 3 -->
+                <div class="card-3d bg-gray-900 rounded-xl overflow-hidden shadow-2xl hover:shadow-yellow-500/30 transition-all duration-500 transform hover:rotateY(-5deg)">
+                    <div class="h-64 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center floating">
+                        <i class="fas fa-fish text-8xl text-white opacity-80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Pan-Seared Chilean Sea Bass</h3>
+                        <p class="text-gray-400 mb-4">With lemon beurre blanc and seasonal vegetables</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-yellow-400 text-xl font-bold">$36</span>
+                            <button class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-full text-sm font-bold">
+                                Add to Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Menu Section -->
+    <section id="menu" class="py-20 bg-gray-900 parallax" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4dbc1ec6d3d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-yellow-400">Our 3D Menu</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 perspective-container">
+                <!-- Left Column -->
+                <div class="space-y-8">
+                    <h3 class="text-2xl font-bold border-b border-yellow-500 pb-2 mb-6">Starters</h3>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Foie Gras Terrine</h4>
+                                <p class="text-gray-400 text-sm">With fig compote and brioche toast</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$24</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Tuna Tartare</h4>
+                                <p class="text-gray-400 text-sm">With avocado, sesame oil, and wonton crisps</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$18</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Burrata Salad</h4>
+                                <p class="text-gray-400 text-sm">With heirloom tomatoes and basil oil</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$16</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold border-b border-yellow-500 pb-2 mt-10 mb-6">Main Courses</h3>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Filet Mignon</h4>
+                                <p class="text-gray-400 text-sm">8oz grass-fed beef with truffle mashed potatoes</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$48</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="space-y-8">
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Duck Confit</h4>
+                                <p class="text-gray-400 text-sm">With cherry reduction and roasted root vegetables</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$38</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Mushroom Ravioli</h4>
+                                <p class="text-gray-400 text-sm">Wild mushroom filling with sage brown butter</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$26</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold border-b border-yellow-500 pb-2 mt-10 mb-6">Desserts</h3>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Chocolate Soufflé</h4>
+                                <p class="text-gray-400 text-sm">With vanilla bean ice cream</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$14</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Crème Brûlée</h4>
+                                <p class="text-gray-400 text-sm">Classic vanilla bean with caramelized sugar</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$12</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item card-3d bg-black bg-opacity-70 p-6 rounded-xl backdrop-filter backdrop-blur-sm hover:bg-opacity-90 transition-all duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Seasonal Fruit Tart</h4>
+                                <p class="text-gray-400 text-sm">With crème pâtissière and berry coulis</p>
+                            </div>
+                            <span class="text-yellow-400 font-bold">$10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Gallery -->
+    <section id="gallery" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-yellow-400">3D Gallery</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 perspective-container">
+                <div class="card-3d h-64 rounded-xl overflow-hidden shadow-lg transform hover:rotateY(15deg) hover:scale-105 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" 
+                         alt="Dish 1" class="w-full h-full object-cover">
+                </div>
+                <div class="card-3d h-64 rounded-xl overflow-hidden shadow-lg transform hover:rotateY(-10deg) hover:scale-105 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1081&q=80" 
+                         alt="Dish 2" class="w-full h-full object-cover">
+                </div>
+                <div class="card-3d h-64 rounded-xl overflow-hidden shadow-lg transform hover:rotateY(10deg) hover:scale-105 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=749&q=80" 
+                         alt="Dish 3" class="w-full h-full object-cover">
+                </div>
+                <div class="card-3d h-64 rounded-xl overflow-hidden shadow-lg transform hover:rotateY(-15deg) hover:scale-105 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=765&q=80" 
+                         alt="Dish 4" class="w-full h-full object-cover">
+                </div>
+                <div class="card-3d h-64 rounded-xl overflow-hidden shadow-lg transform hover:rotateY(20deg) hover:scale-105 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=710&q=80" 
+                         alt="Dish 5" class="w-full h-full object-cover">
+                </div>
+                <div class="card-3d h-64 rounded-xl overflow-hidden shadow-lg transform hover:rotateY(-20deg) hover:scale-105 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=749&q=80" 
+                         alt="Dish 6" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-10 lg:mb-0 lg:pr-10 perspective-container">
+                    <div class="card-3d bg-black bg-opacity-70 p-10 rounded-xl backdrop-filter backdrop-blur-sm transform hover:rotateY(10deg) transition-all duration-500">
+                        <h2 class="text-4xl font-bold mb-6 text-yellow-400">Our Story</h2>
+                        <p class="text-gray-300 mb-4">
+                            Founded in 2010, Gourmet3D brings a revolutionary approach to fine dining by combining 
+                            culinary excellence with immersive 3D experiences.
+                        </p>
+                        <p class="text-gray-300 mb-4">
+                            Our chef, Michel LeGrand, trained under some of the world's most renowned culinary masters 
+                            before developing his unique vision of multi-dimensional dining.
+                        </p>
+                        <p class="text-gray-300">
+                            Every dish at Gourmet3D is designed to engage all your senses, creating memories that 
+                            linger long after the last bite.
+                        </p>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 perspective-container">
+                    <div class="card-3d bg-gradient-to-br from-yellow-600 to-yellow-800 p-1 rounded-xl transform hover:rotateY(-10deg) transition-all duration-500">
+                        <div class="bg-gray-900 p-8 rounded-lg">
+                            <h3 class="text-2xl font-bold mb-4 text-yellow-400">Awards & Recognition</h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-trophy text-yellow-400 mt-1 mr-3"></i>
+                                    <span>Michelin Star - 2018, 2019, 2020, 2021, 2022, 2023</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-award text-yellow-400 mt-1 mr-3"></i>
+                                    <span>World's 50 Best Restaurants - #27 (2023)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-medal text-yellow-400 mt-1 mr-3"></i>
+                                    <span>AAA Five Diamond Award - 6 consecutive years</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-star text-yellow-400 mt-1 mr-3"></i>
+                                    <span>James Beard Award for Outstanding Restaurant (2022)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-yellow-400">Reserve Your Table</h2>
+            
+            <div class="max-w-4xl mx-auto perspective-container">
+                <div class="card-3d bg-black bg-opacity-70 p-10 rounded-xl backdrop-filter backdrop-blur-sm transform hover:rotateY(5deg) transition-all duration-500">
+                    <form class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-gray-300 mb-2">Name</label>
+                            <input type="text" class="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Email</label>
+                            <input type="email" class="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Phone</label>
+                            <input type="tel" class="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Date</label>
+                            <input type="date" class="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Time</label>
+                            <select class="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <option>6:00 PM</option>
+                                <option>6:30 PM</option>
+                                <option>7:00 PM</option>
+                                <option>7:30 PM</option>
+                                <option>8:00 PM</option>
+                                <option>8:30 PM</option>
+                                <option>9:00 PM</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Party Size</label>
+                            <select class="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <option>1 person</option>
+                                <option>2 people</option>
+                                <option>3 people</option>
+                                <option>4 people</option>
+                                <option>5 people</option>
+                                <option>6 people</option>
+                                <option>7+ people</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-300 mb-2">Special Requests</label>
+                            <textarea class="w-full bg-gray-700 rounded-lg px-4 py-3 h-32 focus:outline-none focus:ring-2 focus:ring-yellow-500"></textarea>
+                        </div>
+                        <div class="md:col-span-2 text-center">
+                            <button type="submit" class="px-10 py-4 bg-yellow-600 hover:bg-yellow-700 rounded-full font-bold text-lg transform hover:scale-105 transition">
+                                Book Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-3xl font-bold text-yellow-400 tracking-wider mb-4">
+                        Gourmet<span class="text-white">3D</span>
+                    </div>
+                    <p class="text-gray-400">123 Gourmet Avenue<br>New York, NY 10001</p>
+                </div>
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Hours</h3>
+                    <p class="text-gray-400">Tuesday - Thursday: 5PM - 10PM</p>
+                    <p class="text-gray-400">Friday - Saturday: 5PM - 11PM</p>
+                    <p class="text-gray-400">Sunday: 5PM - 9PM</p>
+                    <p class="text-gray-400">Monday: Closed</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-yellow-600 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-yellow-600 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-yellow-600 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400 mt-4">reservations@gourmet3d.com</p>
+                    <p class="text-gray-400">(212) 555-1234</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500">
+                <p>&copy; 2023 Gourmet3D. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple 3D effect on mouse move
+        document.addEventListener('mousemove', function(e) {
+            const cards = document.querySelectorAll('.card-3d');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const angleX = (y - centerY) / 20;
+                const angleY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+            });
+        });
+
+        // Reset 3D effect when mouse leaves
+        document.addEventListener('mouseout', function(e) {
+            const cards = document.querySelectorAll('.card-3d');
+            cards.forEach(card => {
+                if (!card.contains(e.relatedTarget)) {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                }
+            });
+        });
+
+        // Simple Three.js 3D background
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('foodCanvas');
+            if (!canvas) return;
+            
+            // Set canvas size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Create scene
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+            renderer.setClearColor(0x000000, 0);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create floating food items
+            const foods = [];
+            const foodGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+            
+            for (let i = 0; i < 15; i++) {
+                const material = new THREE.MeshPhongMaterial({
+                    color: Math.random() * 0xffffff,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                
+                const food = new THREE.Mesh(foodGeometry, material);
+                
+                food.position.x = (Math.random() - 0.5) * 20;
+                food.position.y = (Math.random() - 0.5) * 20;
+                food.position.z = (Math.random() - 0.5) * 20;
+                
+                food.userData = {
+                    speedX: Math.random() * 0.02 - 0.01,
+                    speedY: Math.random() * 0.02 - 0.01,
+                    speedZ: Math.random() * 0.02 - 0.01,
+                    rotationSpeed: Math.random() * 0.02 - 0.01
+                };
+                
+                scene.add(food);
+                foods.push(food);
+            }
+            
+            camera.position.z = 5;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                foods.forEach(food => {
+                    food.position.x += food.userData.speedX;
+                    food.position.y += food.userData.speedY;
+                    food.position.z += food.userData.speedZ;
+                    
+                    food.rotation.x += food.userData.rotationSpeed;
+                    food.rotation.y += food.userData.rotationSpeed;
+                    
+                    // Boundary checks
+                    if (Math.abs(food.position.x) > 15) food.userData.speedX *= -1;
+                    if (Math.abs(food.position.y) > 15) food.userData.speedY *= -1;
+                    if (Math.abs(food.position.z) > 15) food.userData.speedZ *= -1;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                camera.aspect = canvas.width / canvas.height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.width, canvas.height);
+            });
+        });
+    </script>
+</body>
+</html>
