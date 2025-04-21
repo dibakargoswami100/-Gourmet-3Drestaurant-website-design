@@ -1,4 +1,4 @@
-# -Gourmet-3Drestaurant-website-design
+# Gourmet-3Drestaurant-website-design
 # 🍽 Gourmet 3D | Fine Dining Experience
 
 **Gourmet 3D** is a next-generation restaurant website that redefines digital dining with immersive 3D visuals, interactive design, and an elegant user experience. This project blends technology and artistry to simulate the luxurious atmosphere of a gourmet restaurant — all through the browser.
@@ -6,6 +6,8 @@
 ## ✨ Inspiration
 
 The idea came from a desire to elevate the typical restaurant website experience. We wanted to go beyond simple images and static menus, creating a visually engaging and immersive platform that captures the *emotion* and *atmosphere* of fine dining. Drawing inspiration from modern 3D web technology, luxury branding, and interactive storytelling, *Gourmet 3D* was born.
+
+# Preview : https://gourmet-3drestaurant-website.netlify.app/
 
 ## 🍴 What it does
 
